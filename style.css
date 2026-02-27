@@ -1,0 +1,123 @@
+:root {
+  --bg-dark: #0a0a0c;           /* Deep Obsidian */
+  --card-bg: #111114;           /* Slate Black */
+  --neon-cyan: #00f2ff;         /* Winter Ice */
+  --neon-magenta: #d946ef;      /* Summer Fuchsia */
+  --text-main: #f8fafc;
+  --text-dim: #475569;
+  --border-subtle: rgba(255, 255, 255, 0.05);
+}
+
+body {
+  background-color: var(--bg-dark);
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 40px 0;
+  color: var(--text-main);
+  display: flex;
+  justify-content: center;
+  overflow-x: hidden;
+}
+
+#app-container {
+  width: 85vw;          /* Controlled widescreen width */
+  max-width: 1400px;    
+  background: var(--card-bg);
+  border: 1px solid var(--border-subtle);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+}
+
+.app-header {
+    text-align: left;
+    margin-bottom: 25px;
+}
+
+.app-header h1 {
+  font-size: 28px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 0;
+  background: linear-gradient(to right, var(--neon-cyan), var(--neon-magenta));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.app-header p {
+    color: var(--text-dim);
+    font-size: 12px;
+    margin-top: 5px;
+    letter-spacing: 1px;
+}
+
+/* --- FullCalendar Layout Fixes --- */
+
+#calendar {
+  height: 85vh !important;
+}
+
+.fc .fc-button-primary {
+  background: transparent !important;
+  color: var(--text-main) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: 6px !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  transition: all 0.2s ease !important;
+}
+
+.fc .fc-button-primary:hover {
+  border-color: var(--neon-cyan) !important;
+  color: var(--neon-cyan) !important;
+}
+
+.fc .fc-button-active {
+  background: var(--neon-cyan) !important;
+  border-color: var(--neon-cyan) !important;
+  color: #000 !important;
+}
+
+/* --- Tactic Style Events --- */
+
+.fc-v-event {
+  background: #1e293b !important; 
+  border: none !important;
+  border-left: 4px solid var(--neon-cyan) !important; 
+  padding: 4px !important;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2) !important;
+}
+
+.fc-event:nth-child(even) {
+  border-left-color: var(--neon-magenta) !important;
+}
+
+.fc-event-title {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+/* Perfect Grid Alignment */
+.fc-theme-standard td, .fc-theme-standard th {
+  border: 1px solid var(--border-subtle) !important;
+}
+
+.fc-col-header-cell {
+  padding: 12px 0 !important;
+  color: var(--text-dim) !important;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.fc .fc-timegrid-slot-label-inner {
+  color: var(--text-dim);
+  font-size: 11px;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-dark); }
+::-webkit-scrollbar-thumb { background: #2d2d35; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--neon-cyan); }
