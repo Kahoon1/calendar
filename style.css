@@ -132,7 +132,9 @@ input:focus { border-color: var(--accent); }
 .fc { color: var(--text-primary); }
 .fc-theme-standard td, .fc-theme-standard th { border-color: var(--border) !important; }
 .fc-col-header-cell { padding: 10px 0; font-size: 11px; text-transform: uppercase; color: var(--text-secondary); font-weight: 600; }
-.fc-timegrid-slot { height: 3em !important; }
+
+/* Fix Scroll Issue: Remove fixed height, allow flex expansion */
+.fc-timegrid-slot { height: auto !important; } 
 
 /* View Buttons */
 .fc .fc-button {
