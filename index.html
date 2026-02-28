@@ -3,22 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tactical Schedule Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" rel="stylesheet">
+    <title>Obsidian Command</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div id="app-container">
+        
         <header class="app-header">
-            <h1>System Schedule</h1>
-            <p>7:00 AM — 2:00 AM Operations</p>
+            <div class="header-left">
+                <h1>Command Center</h1>
+                <div id="progress-track" title="Daily Completion Rate">
+                    <div id="progress-bar"></div>
+                </div>
+            </div>
+            <div class="header-right">
+                <button id="ghostToggle" class="btn-secondary" title="Toggle Completed Tasks">Hide Completed</button>
+                <button id="toggleEditor" class="btn-primary" title="Toggle Sidebar">Sidebar</button>
+            </div>
         </header>
-        <div id="calendar"></div>
+
+        <div id="main-layout">
+            
+            <div id="calendar-wrapper">
+                <div id="calendar"></div>
+            </div>
+            
+            <div id="side-panel">
+                
+                <div class="panel-section">
+                    <label>Inbox (Unscheduled)</label>
+                    <div class="inbox-input-group">
+                        <input type="text" id="inbox-input" placeholder="Task name..." autocomplete="off">
+                        <button id="inbox-add-btn" class="btn-primary">+</button>
+                    </div>
+                    <div id="external-events">
+                        </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="panel-section">
+                    <label>Quick Deploy (Immediate)</label>
+                    <input type="text" id="quick-task-name" placeholder="Task name #tag..." autocomplete="off">
+                    <input type="time" id="quick-task-time" value="09:00">
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="panel-section">
+                    <label>Routine Builder</label>
+                    <input type="text" id="rt-name" placeholder="Routine Name">
+                    
+                    <div class="day-selector">
+                        <label><input type="checkbox" value="1"><span>M</span></label>
+                        <label><input type="checkbox" value="2"><span>T</span></label>
+                        <label><input type="checkbox" value="3"><span>W</span></label>
+                        <label><input type="checkbox" value="4"><span>T</span></label>
+                        <label><input type="checkbox" value="5"><span>F</span></label>
+                    </div>
+
+                    <div class="time-row">
+                        <input type="time" id="rt-start">
+                        <span>-</span>
+                        <input type="time" id="rt-end">
+                    </div>
+                    
+                    <button id="add-routine" class="btn-full">Save Routine</button>
+                </div>
+
+                <div class="legend">
+                    <div class="legend-row"><span>#work</span> <div class="dot tag-work"></div></div>
+                    <div class="legend-row"><span>#health</span> <div class="dot tag-health"></div></div>
+                    <div class="legend-row"><span>#study</span> <div class="dot tag-study"></div></div>
+                    <div class="legend-row"><span>#meet</span> <div class="dot tag-meet"></div></div>
+                    <p style="margin-top: 10px;">Double-Click: <b>Cycle Status</b></p>
+                    <p>Right-Click: <b>Delete</b></p>
+                </div>
+
+            </div>
+        </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
