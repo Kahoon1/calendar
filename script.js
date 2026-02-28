@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const inboxInput = document.getElementById('inbox-input');
     const inboxBtn = document.getElementById('inbox-add-btn');
     
-    // Keys for LocalStorage - Using v8 to ensure fresh start
+    // Keys for LocalStorage
     const TASK_KEY = 'OBSIDIAN_TASKS_v8'; 
     const ROUTINE_KEY = 'OBSIDIAN_ROUTINE_v8';
     const INBOX_KEY = 'OBSIDIAN_INBOX_v8';
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let routineEvents = JSON.parse(localStorage.getItem(ROUTINE_KEY)) || [];
     let inboxItems = JSON.parse(localStorage.getItem(INBOX_KEY)) || [];
 
-    // --- 1. INBOX LOGIC (FIXED) ---
+    // --- 1. INBOX LOGIC ---
 
     function renderInbox() {
         inboxContainer.innerHTML = ''; // Clear current list
@@ -32,12 +32,10 @@ document.addEventListener('DOMContentLoaded', function() {
             titleSpan.innerText = itemText;
             el.appendChild(titleSpan);
 
-            // Create a delete 'x' for inbox items
             let delBtn = document.createElement('span');
             delBtn.innerText = '×';
             delBtn.className = 'delete-inbox-btn';
             delBtn.onclick = function(e) {
-                // Prevent drag event when clicking delete
                 e.preventDefault(); 
                 e.stopPropagation(); 
                 deleteInboxItem(itemText);
@@ -55,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
         inboxItems.push(val);
         localStorage.setItem(INBOX_KEY, JSON.stringify(inboxItems));
         renderInbox();
-        inboxInput.value = ''; // Clear input
+        inboxInput.value = ''; 
     }
 
     function deleteInboxItem(text) {
@@ -67,17 +65,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Attach Listeners
     inboxBtn.onclick = addInboxItem;
     inboxInput.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') addInboxItem();
     });
 
-    // Initialize Draggable Area
     new FullCalendar.Draggable(inboxContainer, {
         itemSelector: '.draggable-item',
         eventData: function(eventEl) {
-            // Get text from the span, ignoring the delete button
             let title = eventEl.querySelector('span').innerText;
             return {
                 title: title.trim(),
@@ -86,22 +81,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Initial Render of Inbox
     renderInbox();
 
 
     // --- 2. CALENDAR CONFIGURATION ---
     const calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'timeGridWeek',
-        slotMinTime: '06:00:00',
-        slotMaxTime: '24:00:00',
+        slotMinTime: '06:00:00', // Start at 6 AM
+        slotMaxTime: '24:00:00', // End at Midnight
         allDaySlot: false,
         nowIndicator: true,
-        height: '100%',
-        expandRows: true,
+        height: '100%', // Fill the container height
+        expandRows: true, // AUTO-FIT rows to screen (prevents scrolling)
         editable: true,
         selectable: true,
-        droppable: true, // Allows dropping from inbox
+        droppable: true, 
         handleWindowResize: true,
         
         headerToolbar: {
@@ -112,16 +106,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
         events: [...savedEvents, ...routineEvents],
 
-        // --- FEATURE: CONTEXT TAGS & STATUS ---
+        // --- TAGS & STATUS ---
         eventClassNames: function(arg) {
             let classes = [];
             let t = arg.event.title.toLowerCase();
             
-            // Status Logic
             if (t.startsWith('!')) classes.push('priority-event');
             if (t.startsWith('x')) classes.push('done-event');
             
-            // Tag Logic (Colors)
             if (t.includes('#work')) classes.push('tag-work');
             if (t.includes('#health') || t.includes('#gym')) classes.push('tag-health');
             if (t.includes('#study')) classes.push('tag-study');
@@ -135,9 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return { html: `<div class="fc-event-main-frame"><div class="fc-event-title">${titleText}</div></div>` };
         },
 
-        // --- EVENT HANDLERS ---
-        
-        // 1. Double Click to Cycle Status
+        // --- HANDLERS ---
         eventClick: function(info) {
             let lastClick = info.event.extendedProps.lastClick || 0;
             let now = Date.now();
@@ -156,14 +146,11 @@ document.addEventListener('DOMContentLoaded', function() {
             info.event.setExtendedProp('lastClick', now);
         },
 
-        // 2. Received Drop from Inbox
         eventReceive: function(info) {
-            // Remove the dropped item from the Inbox list
             deleteInboxItem(info.event.title);
             saveAll();
         },
 
-        // 3. Right Click Delete
         eventDidMount: function(info) {
             info.el.addEventListener('contextmenu', (e) => {
                 e.preventDefault();
@@ -183,9 +170,7 @@ document.addEventListener('DOMContentLoaded', function() {
     updateProgressBar();
 
 
-    // --- 3. OTHER INPUT LISTENERS ---
-
-    // Quick Deploy Input (Immediate Schedule)
+    // --- 3. INPUT LISTENERS ---
     document.getElementById('quick-task-name').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             const name = this.value;
@@ -206,7 +191,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Routine Builder
     document.getElementById('add-routine').onclick = () => {
         const name = document.getElementById('rt-name').value;
         const start = document.getElementById('rt-start').value;
@@ -222,7 +206,6 @@ document.addEventListener('DOMContentLoaded', function() {
         saveAll();
     };
 
-    // UI Toggles
     document.getElementById('toggleEditor').onclick = () => {
         document.getElementById('side-panel').classList.toggle('hidden');
         setTimeout(() => calendar.updateSize(), 300);
@@ -233,7 +216,6 @@ document.addEventListener('DOMContentLoaded', function() {
         this.innerText = active ? "Show Completed" : "Hide Completed";
     };
 
-    // --- SAVING & UTILS ---
     function saveAll() {
         const all = calendar.getEvents();
         const tasks = all.filter(e => !e.extendedProps.isRoutine).map(e => ({ 
